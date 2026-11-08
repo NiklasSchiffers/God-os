@@ -1,7 +1,7 @@
 ENTRY(_start)
 SECTIONS
 {
-    . = 1M; /* Der Kernel wird ab 1MB geladen */
+    . = 1M; 
     .text BLOCK(4K) : ALIGN(4K) {
         *(.multiboot)
         *(.text)
