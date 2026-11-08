@@ -1,27 +1,26 @@
-; boot.asm - Multiboot Header und Kernel-Einstiegspunkt
-MBALIGN     equ  1 << 0            ; Ausrichtung auf 4KB-Grenzen
-MEMINFO     equ  1 << 1            ; Speicherinformationen bereitstellen
-VIDEO_MODE  equ  1 << 2            ; Grafikmodus von GRUB anfordern
-FLAGS       equ  MBALIGN | MEMINFO | VIDEO_MODE ; Multiboot Flags erweitert
-MAGIC       equ  0x1BADB002        ; Magische Zahl für GRUB
-CHECKSUM    equ -(MAGIC + FLAGS)   ; Prüfsumme
+MBALIGN     equ  1 << 0            
+MEMINFO     equ  1 << 1            
+VIDEO_MODE  equ  1 << 2            
+FLAGS       equ  MBALIGN | MEMINFO | VIDEO_MODE 
+MAGIC       equ  0x1BADB002        
+CHECKSUM    equ -(MAGIC + FLAGS)   
 
 section .multiboot
 align 4
     dd MAGIC
     dd FLAGS
     dd CHECKSUM
-    
-    ; Grafik-Felder für Multiboot (wird benötigt, wenn VIDEO_MODE Flag gesetzt ist)
-    dd 0                      ; mode_type (0 = linearer Framebuffer)
-    dd 640                    ; width (Bildschirmbreite)
-    dd 480                    ; height (Bildschirmhöhe)
-    dd 16                     ; depth (16-Bit Farbtiefe)
+
+
+    dd 0                     
+    dd 640                    
+    dd 480                    
+    dd 16                     
 
 section .bss
 align 16
 stack_bottom:
-    resb 16384                  ; 16 KB Stack reservieren
+    resb 16384                  
 stack_top:
 
 section .text
@@ -29,10 +28,10 @@ global _start
 extern kernel_main
 
 _start:
-    mov esp, stack_top          ; Stack-Pointer setzen
-    push ebx                    ; Multiboot-Informationsstruktur übergeben
-    push eax                    ; Magische Zahl übergeben
-    call kernel_main            ; C-Kernel aufrufen
+    mov esp, stack_top          
+    push ebx                   
+    push eax                    
+    call kernel_main            
     cli
 .hang:  hlt
     jmp .hang
