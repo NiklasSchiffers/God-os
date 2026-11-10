@@ -1,0 +1,15 @@
+xorriso -as mkisofs -R -J -o data.iso iso/files
+cp data.iso iso/
+cp kernel.bin iso/boot/
+
+cat > iso/boot/grub/grub.cfg << 'EOF'
+menuentry "SparrowOS" {
+    multiboot /boot/kernel.bin
+    module /data.iso
+    boot
+}
+EOF
+
+grub2-mkrescue -o SparrowOS.iso iso/
+
+qemu-system-i386 -cdrom SparrowOS.iso
